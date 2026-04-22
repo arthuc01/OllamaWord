@@ -51,6 +51,8 @@ interface ComposeRequest {
   model?: string;
   prompt?: string;
   context?: string;
+  beforeCursor?: string;
+  afterCursor?: string;
 }
 
 /**
@@ -135,26 +137,49 @@ Selected text:
  * This is deliberately separate from buildPrompt because there may be no
  * selected source text. The user instruction is the source of the new content.
  */
-function buildComposePrompt(request: Required<Pick<ComposeRequest, "prompt">> & Pick<ComposeRequest, "context">) {
-  const contextBlock = request.context?.trim()
-    ? `Nearby document context:
+function buildComposePrompt(
+  request: Required<Pick<ComposeRequest, "prompt">> &
+    Pick<ComposeRequest, "context" | "beforeCursor" | "afterCursor">
+) {
+  const beforeCursor = request.beforeCursor?.trim() ?? "";
+  const afterCursor = request.afterCursor?.trim() ?? "";
+
+  const cursorContextBlock =
+    beforeCursor || afterCursor
+      ? `Nearby document context with insertion point:
+"""${beforeCursor} [[CURSOR]] ${afterCursor}"""
+
+Text before cursor:
+"""${beforeCursor || "(none)"}"""
+
+Text after cursor:
+"""${afterCursor || "(none)"}"""
+
+`
+      : "";
+
+  const legacyContextBlock =
+    !cursorContextBlock && request.context?.trim()
+      ? `Nearby document context:
 """${request.context.trim()}"""
 
 `
-    : "";
+      : "";
 
   return `You are a careful writing assistant drafting text for a Microsoft Word document.
 
-${contextBlock}User request:
+${cursorContextBlock}${legacyContextBlock}User request:
 ${request.prompt}
 
 Rules:
-- Use the nearby document context only to understand topic, style, terminology, and continuity.
+- The marker [[CURSOR]] shows exactly where the generated text will be inserted.
+- Use text before and after the cursor to maintain topic, style, terminology, and continuity.
 - Do not rewrite, summarize, or quote the context unless the user explicitly asks for that.
 - Follow the user's request directly.
 - Do not invent specific facts, names, dates, citations, or references unless the user provided them.
 - If the request asks for factual detail that is not supplied, keep the wording general.
 - Write polished text that can be inserted directly into the document.
+- Return only the new text that should be inserted at [[CURSOR]], not the surrounding context.
 - Return only the drafted text, with no preamble or explanation.
 `;
 }
@@ -351,11 +376,13 @@ app.post("/compose", async (request: Request, response: Response) => {
   try {
     const prompt = buildComposePrompt({
       prompt: body.prompt,
-      context: body.context
+      context: body.context,
+      beforeCursor: body.beforeCursor,
+      afterCursor: body.afterCursor
     });
 
     console.log(
-      `[compose] model=${body.model} promptChars=${body.prompt.length} contextChars=${body.context?.length ?? 0}`
+      `[compose] model=${body.model} promptChars=${body.prompt.length} beforeChars=${body.beforeCursor?.length ?? 0} afterChars=${body.afterCursor?.length ?? 0}`
     );
 
     const draftedText = await callOllamaGenerate(body.model, prompt);

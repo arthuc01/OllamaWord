@@ -9,64 +9,84 @@
   </head>
   <body>
     <main class="app">
-      <section class="panel">
-        <h2>Transform selected text</h2>
-
-        <label for="action-select">Action</label>
-        <select id="action-select"></select>
-
+      <section class="panel compact-panel">
         <details class="options">
-          <summary>Model and settings</summary>
+          <summary>
+            <span>Model and settings</span>
+            <span id="active-model-label" class="summary-value">Loading model...</span>
+          </summary>
 
           <label for="model-select">Ollama model</label>
           <div class="model-row">
             <select id="model-select"></select>
-            <button id="reload-models-button" type="button">Reload</button>
+            <button id="reload-models-button" class="secondary-button" type="button">Reload</button>
           </div>
 
-          <label for="target-length-select">Target length</label>
-          <select id="target-length-select">
-            <option value="similar">Similar</option>
-            <option value="shorter">Shorter</option>
-            <option value="longer">Longer</option>
-          </select>
+          <div class="settings-grid">
+            <div>
+              <label for="target-length-select">Target length</label>
+              <select id="target-length-select">
+                <option value="similar">Similar</option>
+                <option value="shorter">Shorter</option>
+                <option value="longer">Longer</option>
+              </select>
+            </div>
 
-          <label for="tone-select">Tone</label>
-          <select id="tone-select">
-            <option value="neutral">Neutral</option>
-            <option value="formal">Formal</option>
-            <option value="friendly">Friendly</option>
-            <option value="academic">Academic</option>
-            <option value="plain">Plain</option>
-          </select>
+            <div>
+              <label for="tone-select">Tone</label>
+              <select id="tone-select">
+                <option value="neutral">Neutral</option>
+                <option value="formal">Formal</option>
+                <option value="friendly">Friendly</option>
+                <option value="academic">Academic</option>
+                <option value="plain">Plain</option>
+              </select>
+            </div>
+          </div>
         </details>
-
-        <button id="run-button" class="primary" type="button">Apply to highlighted text</button>
-        <div id="selection-count" class="count">No selection read yet.</div>
       </section>
 
       <section class="panel">
-        <h2>Write at cursor</h2>
+        <div class="mode-tabs" role="tablist" aria-label="Writing mode">
+          <button id="selection-mode-button" class="mode-tab active" type="button">Selection</button>
+          <button id="cursor-mode-button" class="mode-tab" type="button">Cursor</button>
+        </div>
 
-        <label for="custom-prompt">Prompt</label>
-        <textarea id="custom-prompt" placeholder="Example: Write a short paragraph about subject X."></textarea>
+        <div id="selection-mode-panel" class="mode-panel">
+          <label for="action-select">Action</label>
+          <select id="action-select"></select>
 
-        <button id="write-at-cursor-button" class="primary" type="button">Generate and insert at cursor</button>
+          <button id="run-button" class="primary" type="button">Apply to highlighted text</button>
+          <div id="selection-count" class="count">No selection read yet.</div>
+        </div>
+
+        <div id="cursor-mode-panel" class="mode-panel hidden">
+          <label for="custom-prompt">Prompt</label>
+          <textarea id="custom-prompt" placeholder="Write a short paragraph about subject X."></textarea>
+
+          <div class="button-row">
+            <button id="draft-at-cursor-button" type="button">Draft only</button>
+            <button id="write-at-cursor-button" class="primary" type="button">Insert at cursor</button>
+          </div>
+        </div>
       </section>
 
-      <section class="panel">
-        <h2>Output preview</h2>
-        <textarea id="output-text" placeholder="The generated text will appear here."></textarea>
+      <section class="panel output-panel">
+        <div class="output-header">
+          <h2>Output</h2>
+          <button id="run-again-button" class="text-button" type="button">Run again</button>
+        </div>
+
+        <textarea id="output-text" placeholder="Generated text appears here."></textarea>
 
         <div class="button-grid">
           <button id="replace-button" type="button">Replace selection</button>
           <button id="insert-button" type="button">Insert below</button>
-          <button id="copy-button" type="button">Copy output</button>
-          <button id="run-again-button" type="button">Run again</button>
+          <button id="copy-button" type="button">Copy</button>
         </div>
       </section>
 
-      <section class="status-area" aria-live="polite">
+      <section id="status-area" class="status-area" aria-live="polite">
         <div id="spinner" class="spinner hidden"></div>
         <div id="status-message">Loading models...</div>
       </section>
