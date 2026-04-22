@@ -1,0 +1,24 @@
+{
+  "name": "ollama-word-addin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A beginner-friendly Microsoft Word task pane add-in that sends selected text to a local Ollama model through a small helper server.",
+  "scripts": {
+    "dev:addin": "vite --host localhost --port 3000",
+    "dev:helper": "tsx helper/server.ts",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.10",
+    "@types/office-js": "^1.0.457",
+    "office-addin-dev-certs": "^1.13.5",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.3"
+  }
+}

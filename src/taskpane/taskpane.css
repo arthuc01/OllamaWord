@@ -1,0 +1,175 @@
+:root {
+  color-scheme: light;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: #1f2933;
+  background: #f5f7fa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 650;
+}
+
+.app-header p {
+  margin: 4px 0 0;
+  color: #52616b;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.panel {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.panel-title-row,
+.model-row,
+.button-grid,
+.status-area {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.panel-title-row {
+  justify-content: space-between;
+}
+
+h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+label,
+summary,
+.count {
+  font-size: 12px;
+  color: #52616b;
+}
+
+textarea,
+select,
+button {
+  width: 100%;
+  font: inherit;
+}
+
+textarea,
+select {
+  border: 1px solid #bcccdc;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+textarea {
+  min-height: 92px;
+  padding: 8px;
+  resize: vertical;
+  line-height: 1.4;
+}
+
+#output-text {
+  min-height: 140px;
+}
+
+select {
+  min-height: 34px;
+  padding: 4px 8px;
+}
+
+button {
+  min-height: 34px;
+  padding: 6px 10px;
+  border: 1px solid #9fb3c8;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #102a43;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: #eef4f8;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.primary {
+  border-color: #0b6bcb;
+  background: #0b6bcb;
+  color: #ffffff;
+}
+
+.primary:hover:not(:disabled) {
+  background: #095aa8;
+}
+
+.model-row select {
+  flex: 1;
+}
+
+.model-row button {
+  width: auto;
+}
+
+.button-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.options {
+  padding-top: 2px;
+}
+
+.options[open] {
+  display: grid;
+  gap: 8px;
+}
+
+.status-area {
+  min-height: 32px;
+  padding: 8px 2px;
+  color: #334e68;
+  font-size: 13px;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #bcccdc;
+  border-top-color: #0b6bcb;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
